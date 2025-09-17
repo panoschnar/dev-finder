@@ -33,22 +33,25 @@ Includes **infinite scrolling**, **dynamic filters**, **bookmarks**, and a **mod
 
 ## **Getting Started**
 
-###  Clone the repository
+### 1. Clone the repository
 ```bash
-git clone https://github.com/panoschnar/dev-finder.git
-cd dev-finder
-
+git clone https://github.com/yourusername/DevFinder.git
+cd DevFinder
 2. Install dependencies
+bash
+Copy code
 npm install
 # or
 yarn install
-
 3. Run the development server
+bash
+Copy code
 npm run dev
 # or
 yarn dev
+Open http://localhost:3000 to see the app in your browser.
 
-
+```
 
 
 ## **Usage**
@@ -61,7 +64,7 @@ Click “Invite” on a developer card to open the confirmation modal.
 
 Bookmark the page to save current filters in the URL.
 
-## ** Notes**
+## **Notes**
 
 Mock data is used to simulate a remote API with pagination.
 
@@ -71,8 +74,8 @@ All state is managed via React Context for easy access across components.
 
 Tailwind classes are used for responsive and modern UI styling.
 
-Screenshots
+## **Screenshots**
 
-public\Screenshot_1.jpg
-public\Screenshot_2.jpg
-public\Screenshot_3.jpg
+![DevFinder Screenshot](public/Screenshot_1.jpg)
+![DevFinder Screenshot](public/Screenshot_2.jpg)
+![DevFinder Screenshot](public/Screenshot_3.jpg)
