@@ -1,40 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# **DevFinder**
 
-## Getting Started
+A **responsive web app** to **search, filter, and explore developers** for your next project.  
+Built with **Next.js**, **TypeScript**, and **Tailwind CSS**.  
+Includes **infinite scrolling**, **dynamic filters**, **bookmarks**, and a **modal invite feature**.
 
-First, run the development server:
+---
 
+## **Features**
+
+- Browse a **list of developers** with **infinite scrolling**.
+- **Filter developers** by:
+  - **Last Name** (partial, lexicographic match)
+  - **Preferred Programming Language** (**JavaScript**, **Python**, **Golang**)
+- View developer details in a **card**:
+  - **First Name & Last Name**
+  - **Email**
+  - **Preferred Language**
+- **Bookmark filtered pages** via URL.
+- **Invite developers** via modal confirmation.
+- Fully **responsive** for **mobile and desktop**.
+
+---
+
+## **Technologies**
+
+- **Next.js** – React framework for server-side rendering & routing.
+- **TypeScript** – Type-safe development.
+- **Tailwind CSS** – Utility-first styling.
+- **React Context** – State management for developers, filters, and modal.
+
+---
+
+## **Getting Started**
+
+###  Clone the repository
 ```bash
+git clone https://github.com/panoschnar/dev-finder.git
+cd dev-finder
+
+2. Install dependencies
+npm install
+# or
+yarn install
+
+3. Run the development server
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## **Usage**
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Filter developers using the input and language dropdown.
 
-## Learn More
+Scroll down to automatically load more developers.
 
-To learn more about Next.js, take a look at the following resources:
+Click “Invite” on a developer card to open the confirmation modal.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+Bookmark the page to save current filters in the URL.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ** Notes**
 
-## Deploy on Vercel
+Mock data is used to simulate a remote API with pagination.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Infinite scroll is implemented using the Intersection Observer API.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+All state is managed via React Context for easy access across components.
+
+Tailwind classes are used for responsive and modern UI styling.
+
+Screenshots
+
+public\Screenshot_1.jpg
+public\Screenshot_2.jpg
+public\Screenshot_3.jpg
