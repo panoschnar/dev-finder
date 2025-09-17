@@ -1,5 +1,4 @@
-// Person model
-export interface Person {
+export interface IPerson {
   id: string;
   firstName: string;
   lastName: string;
@@ -7,8 +6,3 @@ export interface Person {
   language: "Javascript" | "Python" | "Golang";
 }
 
-// Response from the API
-export interface PeopleResponse {
-  data: Person[];
-  hasMore: boolean;
-}

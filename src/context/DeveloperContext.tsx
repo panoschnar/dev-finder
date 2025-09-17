@@ -1,18 +1,18 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { Person } from "../utils/interfaces";
+import { IPerson } from "../utils/interfaces";
 import { fetchPeople } from "../utils/mockData";
 
 type DeveloperContextType = {
   filters: { lastName: string; language: string };
   setFilters: (filters: { lastName: string; language: string }) => void;
-  people: Person[];
+  people: IPerson[];
   loading: boolean;
   error: string | null;
   nextPage: number | null;
   loadMoreResults: () => void;
-  inviting: Person | null;
-  setInviting: (person: Person | null) => void;
+  inviting: IPerson | null;
+  setInviting: (person: IPerson | null) => void;
   bookmarkUrl: () => void;
   clearFilters: () => void;
 };
@@ -21,11 +21,11 @@ const DeveloperContext = createContext<DeveloperContextType | undefined>(undefin
 
 export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [filters, setFilters] = useState({ lastName: "", language: "" });
-  const [people, setPeople] = useState<Person[]>([]);
+  const [people, setPeople] = useState<IPerson[]>([]);
   const [nextPage, setNextPage] = useState<number | null>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inviting, setInviting] = useState<Person | null>(null);
+  const [inviting, setInviting] = useState<IPerson | null>(null);
 
   // Load more results
   const loadMoreResults = useCallback(async () => {

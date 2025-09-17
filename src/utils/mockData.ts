@@ -1,6 +1,6 @@
-import { Person } from "./interfaces";
-import { v4 as uuidv4 } from "uuid";
-const developersData: Person[] =[
+import { IPerson } from "./interfaces";
+
+const developersData: IPerson[] =[
   {
     "id": "1",
     "firstName": "Alice",
@@ -355,31 +355,6 @@ const developersData: Person[] =[
 
 export const PAGE_SIZE = 10;
 
-const firstNames = [
-  "Alice", "Bob", "Charlie", "Diana", "Ethan", "Fiona",
-  "George", "Hannah", "Ivan", "Julia", "Kevin", "Laura",
-  "Michael", "Nina", "Oliver", "Paula", "Quentin", "Rachel",
-  "Sam", "Tina", "Umar", "Vera", "William", "Xena", "Yara", "Zane"
-];
-
-const lastNames = [
-  "Anderson", "Brown", "Clark", "Davis", "Evans", "Foster",
-  "Garcia", "Harris", "Ivanov", "Johnson", "King", "Lopez",
-  "Miller", "Nguyen", "O'Neill", "Patel", "Quinn", "Roberts",
-  "Smith", "Taylor", "Usman", "Valdez", "Walker", "Xu", "Young", "Zimmerman"
-];
-
-const languages: Person["language"][] = ["Javascript", "Python", "Golang"];
-
-export const mockData: Person[] = Array.from({ length: 200 }, (_, i) => {
-  const firstName = firstNames[i % firstNames.length];
-  const lastName = lastNames[i % lastNames.length];
-  const language = languages[i % languages.length];
-  const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`;
-  return { id: i.toString(), firstName, lastName, language, email };
-});
-
-// Simulated API call with pagination and filters
 export async function fetchPeople({
 page = 0,
   lastName,
@@ -388,7 +363,7 @@ page = 0,
   page?: number;
   lastName?: string;
   language?: string;
-}): Promise<{ results: Person[]; next: number | null }> {
+}): Promise<{ results: IPerson[]; next: number | null }> {
   return new Promise((resolve) => {
     setTimeout(() => {
       let filtered = [...developersData];

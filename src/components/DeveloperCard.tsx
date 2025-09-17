@@ -1,10 +1,10 @@
 import React from "react";
-import { Person } from "../utils/interfaces";
+import { IPerson } from "../utils/interfaces";
 import { Button } from "./Button";
 
 interface DeveloperCardProps {
-  person: Person;
-  onInvite: (person: Person) => void;
+  person: IPerson;
+  onInvite: (person: IPerson) => void;
 }
 
 export const DeveloperCard: React.FC<DeveloperCardProps> = ({
@@ -12,7 +12,7 @@ export const DeveloperCard: React.FC<DeveloperCardProps> = ({
   onInvite,
 }) => {
   return (
-    <div className=" rounded-lg p-4 bg-white shadow flex flex-col justify-between hover:shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.2)] transition-shadow h-full">
+    <div className=" rounded-lg p-6 bg-white shadow flex flex-col justify-between hover:shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.2)] transition-shadow h-full">
       <div>
         <p className="text-xl text-black font-bold">
           {person.firstName} {person.lastName}

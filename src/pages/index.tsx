@@ -18,14 +18,12 @@ export default function Home() {
     inviting,
     setInviting,
     bookmarkUrl,
-    clearFilters,
   } = useDeveloperContext();
 
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  // IntersectionObserver for infinite scroll
   useEffect(() => {
-    if (!sentinelRef.current) return;
+    if (!observerRef.current) return;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && nextPage !== null && !loading) {
@@ -33,7 +31,7 @@ export default function Home() {
       }
     });
 
-    observer.observe(sentinelRef.current);
+    observer.observe(observerRef.current);
     return () => observer.disconnect();
   }, [nextPage, loading, loadMoreResults]);
 
@@ -63,8 +61,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* Sentinel for infinite scroll */}
-      <div ref={sentinelRef} className="h-1" />
+      {/* Observer for infinite scroll */}
+      <div ref={observerRef} className="h-1" />
 
       {loading && <Loader />}
       {nextPage === null && !loading && people.length > 0 && (
