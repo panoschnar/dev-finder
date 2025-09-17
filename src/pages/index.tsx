@@ -1,0 +1,86 @@
+import { useEffect, useRef } from "react";
+import { DeveloperCard } from "../components/DeveloperCard";
+import { FilterBar } from "../components/FilterBar";
+import { Modal } from "../components/Modal";
+import { TopBar } from "@/components/TopBar";
+import Loader from "@/components/Loader";
+import { useDeveloperContext } from "../context/DeveloperContext";
+
+export default function Home() {
+  const {
+    filters,
+    setFilters,
+    people,
+    loading,
+    error,
+    nextPage,
+    loadMoreResults,
+    inviting,
+    setInviting,
+    bookmarkUrl,
+    clearFilters,
+  } = useDeveloperContext();
+
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // IntersectionObserver for infinite scroll
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && nextPage !== null && !loading) {
+        loadMoreResults();
+      }
+    });
+
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [nextPage, loading, loadMoreResults]);
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4">
+      <TopBar />
+
+      <FilterBar
+        filters={filters}
+        onFilterChange={(key, value) => setFilters({ ...filters, [key]: value })}
+        onBookmark={bookmarkUrl}
+      />
+
+      {error && <p className="text-red-500 text-center">{error}</p>}
+
+      {people.length === 0 && !loading ? (
+        <p className="text-center text-gray-500">No results found</p>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {people.map((person) => (
+            <DeveloperCard
+              key={person.id}
+              person={person}
+              onInvite={setInviting}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Sentinel for infinite scroll */}
+      <div ref={sentinelRef} className="h-1" />
+
+      {loading && <Loader />}
+      {nextPage === null && !loading && people.length > 0 && (
+        <p className="mt-4 text-center text-gray-500">No more results</p>
+      )}
+
+      <Modal
+        open={!!inviting}
+        title={`Invite ${inviting?.firstName} ${inviting?.lastName}`}
+        description={`Send an invite to ${inviting?.email}?`}
+        onConfirm={() => {
+          alert(`Invite sent to ${inviting?.email}`);
+          setInviting(null);
+        }}
+        onClose={() => setInviting(null)}
+      />
+    </div>
+  );
+}
