@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef } from "react";
 import { DeveloperCard } from "../components/DeveloperCard";
 import { FilterBar } from "../components/FilterBar";
@@ -5,6 +6,7 @@ import { Modal } from "../components/Modal";
 import { TopBar } from "@/components/TopBar";
 import Loader from "@/components/Loader";
 import { useDeveloperContext } from "../context/DeveloperContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const {
@@ -21,7 +23,18 @@ export default function Home() {
   } = useDeveloperContext();
 
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
+  // Sync filters to URL on change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (filters.lastName) params.append("lastName", filters.lastName);
+    if (filters.language) params.append("language", filters.language);
+
+    router.replace(`/?${params.toString()}`, { scroll: false });
+  }, [filters.lastName, filters.language, router]);
+
+  // Infinite scroll observer
   useEffect(() => {
     if (!observerRef.current) return;
 
@@ -41,7 +54,9 @@ export default function Home() {
 
       <FilterBar
         filters={filters}
-        onFilterChange={(key, value) => setFilters({ ...filters, [key]: value })}
+        onFilterChange={(key, value) =>
+          setFilters({ ...filters, [key]: value })
+        }
         onBookmark={bookmarkUrl}
       />
 

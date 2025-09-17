@@ -27,12 +27,22 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [error, setError] = useState<string | null>(null);
   const [inviting, setInviting] = useState<IPerson | null>(null);
 
+  // Initialize filters from URL params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const lastName = params.get("lastName") ?? "";
+    const language = params.get("language") ?? "";
+    setFilters({ lastName, language });
+    setNextPage(0); // trigger first fetch
+  }, []);
+
   // Load more results
   const loadMoreResults = useCallback(async () => {
     if (nextPage === null || loading) return;
 
     setLoading(true);
     setError(null);
+
     try {
       const data = await fetchPeople({
         page: nextPage,
@@ -54,6 +64,13 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setPeople([]);
     setNextPage(0);
   }, [filters.lastName, filters.language]);
+
+  // Trigger first fetch when nextPage is 0
+  useEffect(() => {
+    if (nextPage === 0) {
+      loadMoreResults();
+    }
+  }, [nextPage, loadMoreResults]);
 
   // Bookmark current page with filters
   const bookmarkUrl = () => {
