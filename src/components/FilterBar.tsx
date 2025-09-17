@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "./Button";
 import { languages } from "@/utils/constants";
+import { shareIcon } from "@/utils/icons";
 
 interface FilterBarProps {
   filters: {
@@ -55,9 +56,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <Button
         variant="secondary"
         onClick={onBookmark}
-        className="w-full md:w-auto"
+        className="w-full md:w-auto flex items-center justify-center gap-2"
       >
-        Bookmark Page
+        {shareIcon} Share
       </Button>
     </div>
   );

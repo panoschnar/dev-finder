@@ -61,7 +61,7 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     if (filters.lastName) params.append("lastName", filters.lastName);
     if (filters.language) params.append("language", filters.language);
     navigator.clipboard.writeText(`${window.location.origin}/?${params.toString()}`);
-    alert("Current URL copied to clipboard!");
+    alert("URL with current Filters copied to clipboard!");
   };
 
   // Clear filters
