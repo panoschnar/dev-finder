@@ -23,7 +23,7 @@ export const Button: React.FC<ButtonProps> = ({
   }
 
   const baseClasses =
-    "px-4 py-2 rounded font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "px-4 py-2 rounded font-semibold cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2";
 
   return (
     <button
