@@ -1,5 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { IPerson } from "../utils/interfaces";
 import { fetchPeople } from "../utils/mockData";
 
@@ -17,26 +23,44 @@ type DeveloperContextType = {
   clearFilters: () => void;
 };
 
-const DeveloperContext = createContext<DeveloperContextType | undefined>(undefined);
+const DeveloperContext = createContext<DeveloperContextType | undefined>(
+  undefined
+);
 
-export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [filters, setFilters] = useState({ lastName: "", language: "" });
+export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  //  Initial filters from URL
+  const getInitialFilters = () => {
+    if (typeof window === "undefined") return { lastName: "", language: "" };
+
+    const params = new URLSearchParams(window.location.search);
+    return {
+      lastName: params.get("lastName") || "",
+      language: params.get("language") || "",
+    };
+  };
+
+  const [filters, setFilters] = useState(getInitialFilters);
   const [people, setPeople] = useState<IPerson[]>([]);
   const [nextPage, setNextPage] = useState<number | null>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [inviting, setInviting] = useState<IPerson | null>(null);
 
-  // Initialize filters from URL params
+  //  Keep URL in sync with filters
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const lastName = params.get("lastName") ?? "";
-    const language = params.get("language") ?? "";
-    setFilters({ lastName, language });
-    setNextPage(0); // trigger first fetch
-  }, []);
+    const params = new URLSearchParams();
+    if (filters.lastName) params.set("lastName", filters.lastName);
+    if (filters.language) params.set("language", filters.language);
 
-  // Load more results
+    const newUrl = `${window.location.pathname}${
+      params.toString() ? `?${params.toString()}` : ""
+    }`;
+    window.history.replaceState({}, "", newUrl);
+  }, [filters]);
+
+  //  Load more results (deduplication included)
   const loadMoreResults = useCallback(async () => {
     if (nextPage === null || loading) return;
 
@@ -50,35 +74,30 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         language: filters.language,
       });
 
-      setPeople((prev) => [...prev, ...data.results]);
+      setPeople((prev) => {
+        const existingIds = new Set(prev.map((p) => p.id));
+        const newResults = data.results.filter((p) => !existingIds.has(p.id));
+        return [...prev, ...newResults];
+      });
+
       setNextPage(data.next ?? null);
-    } catch (err) {
+    } catch {
       setError("Failed to load more developers.");
     } finally {
       setLoading(false);
     }
   }, [nextPage, loading, filters.lastName, filters.language]);
 
-  // Reset list when filters change
+  //  Reset list when filters change
   useEffect(() => {
     setPeople([]);
     setNextPage(0);
   }, [filters.lastName, filters.language]);
 
-  // Trigger first fetch when nextPage is 0
-  useEffect(() => {
-    if (nextPage === 0) {
-      loadMoreResults();
-    }
-  }, [nextPage, loadMoreResults]);
-
-  // Bookmark current page with filters
+  //  Bookmark current page
   const bookmarkUrl = () => {
-    const params = new URLSearchParams();
-    if (filters.lastName) params.append("lastName", filters.lastName);
-    if (filters.language) params.append("language", filters.language);
-    navigator.clipboard.writeText(`${window.location.origin}/?${params.toString()}`);
-    alert("URL with current Filters copied to clipboard!");
+    navigator.clipboard.writeText(window.location.href);
+    alert("URL with current filters copied to clipboard!");
   };
 
   // Clear filters
@@ -87,6 +106,13 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setPeople([]);
     setNextPage(0);
   };
+
+  //  Trigger initial load
+  useEffect(() => {
+    if (nextPage === 0) {
+      loadMoreResults();
+    }
+  }, [nextPage, loadMoreResults]);
 
   return (
     <DeveloperContext.Provider
@@ -112,7 +138,9 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 export const useDeveloperContext = () => {
   const context = useContext(DeveloperContext);
   if (!context) {
-    throw new Error("useDeveloperContext must be used within a DeveloperProvider");
+    throw new Error(
+      "useDeveloperContext must be used within a DeveloperProvider"
+    );
   }
   return context;
 };
