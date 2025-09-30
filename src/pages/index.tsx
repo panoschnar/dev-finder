@@ -44,7 +44,10 @@ export default function Home() {
       <FilterBar
         filters={filters}
         onFilterChange={(key, value) =>
-          setFilters({ ...filters, [key]: value })
+          setFilters({
+            lastName: key === "lastName" ? value : filters.lastName,
+            language: key === "language" ? value : filters.language,
+          })
         }
         onBookmark={bookmarkUrl}
       />
@@ -54,7 +57,7 @@ export default function Home() {
       {people.length === 0 && !loading ? (
         <p className="text-center text-gray-500">No results found</p>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(clamp(300px,30%,400px),1fr))] gap-[clamp(1rem,2vw,2rem)]">
           {people.map((person) => (
             <DeveloperCard
               key={person.id}
