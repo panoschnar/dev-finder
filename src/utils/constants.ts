@@ -4,3 +4,6 @@ export const languages = [
   { label: "Python", value: "Python" },
   { label: "Golang", value: "Golang" },
 ];
+
+export const WINDOW_BEFORE = 50;
+export const WINDOW_AFTER = 50;

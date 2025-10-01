@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { IPerson } from "../utils/interfaces";
 import { fetchPeople } from "../utils/mockData";
-import { languages } from "@/utils/constants";
+import { languages, WINDOW_AFTER, WINDOW_BEFORE } from "@/utils/constants";
 import { getFiltersFromUrl } from "@/utils/helpers";
 
 type Filters = { lastName: string; language: string };
@@ -75,7 +75,19 @@ export const DeveloperProvider: React.FC<{ children: React.ReactNode }> = ({
       setPeople((prev) => {
         const existingIds = new Set(prev.map((p) => p.id));
         const newResults = data.results.filter((p) => !existingIds.has(p.id));
-        return [...prev, ...newResults];
+
+        // Merge current with new results
+        const merged = [...prev, ...newResults];
+
+        // Trim to sliding window if merged length exceeds window
+        if (merged.length > WINDOW_BEFORE + WINDOW_AFTER + newResults.length) {
+          // Keep last WINDOW_AFTER + newResults.length entries
+          return merged.slice(
+            -(WINDOW_BEFORE + WINDOW_AFTER + newResults.length)
+          );
+        }
+
+        return merged;
       });
 
       setNextPage(data.next ?? null);
