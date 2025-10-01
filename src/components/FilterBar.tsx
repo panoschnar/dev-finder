@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { languages } from "@/utils/constants";
 import { shareIcon } from "@/utils/icons";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilterBarProps {
   filters: {
@@ -17,14 +18,24 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onFilterChange,
   onBookmark,
 }) => {
+   const [searchValue, setSearchValue] = useState(filters.lastName);
+const debouncedSearch = useDebounce(searchValue, 250);
+
+  // Sync back to parent only when debounce settles
+  useEffect(() => {
+    if (debouncedSearch !== filters.lastName) {
+      onFilterChange("lastName", debouncedSearch);
+    }
+  }, [debouncedSearch, filters.lastName, onFilterChange]);
+
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-6 items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200">
       {/* Last Name Input */}
       <input
         type="text"
         placeholder="Search by last name..."
-        value={filters.lastName}
-        onChange={(e) => onFilterChange("lastName", e.target.value)}
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
         className="w-full md:flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-600 focus:border-blue-500 transition"
       />
 
