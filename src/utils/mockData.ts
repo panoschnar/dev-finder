@@ -1,3 +1,4 @@
+import { PAGE_SIZE } from "./constants";
 import { IPerson } from "./interfaces";
 
 const developersData: IPerson[] =[
@@ -353,7 +354,6 @@ const developersData: IPerson[] =[
   }
 ]
 
-export const PAGE_SIZE = 10;
 
 export async function fetchPeople({
 page = 0,

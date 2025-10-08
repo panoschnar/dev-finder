@@ -5,5 +5,6 @@ export const languages = [
   { label: "Golang", value: "Golang" },
 ];
 
-export const WINDOW_BEFORE = 50;
-export const WINDOW_AFTER = 50;
+export const WINDOW_BEFORE = 20;
+export const WINDOW_AFTER = 20;
+export const PAGE_SIZE = 10;
